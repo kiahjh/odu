@@ -9,11 +9,14 @@
     "frontendDist": "../dist"
   },
   "app": {
+    "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "odu",
+        "decorations": false,
+        "title": "Odu",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "transparent": true
       }
     ],
     "security": {

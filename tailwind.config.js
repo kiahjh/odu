@@ -2,7 +2,11 @@
 export default {
   content: [`./ts/**/*.{js,jsx,ts,tsx}`],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        roboto: [`Roboto`, `sans-serif`],
+      },
+    },
   },
   plugins: [],
 };
