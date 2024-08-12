@@ -1,6 +1,6 @@
 import cx from "classnames";
 import type { Component } from "solid-js";
-import Logo from "../assets/logo.svg";
+import Logo from "/logo.svg";
 
 interface Props {
   className?: string;
