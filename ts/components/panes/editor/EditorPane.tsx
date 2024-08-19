@@ -26,13 +26,27 @@ const EditorPane: Component<Props> = (props) => {
     );
   });
 
+  const indexOfActiveBuffer =
+    props.pane.buffers.findIndex((b) => b.active) ?? 0;
+
   return (
     <div class="flex flex-col flex-grow bg-gray-900">
-      <nav class="bg-gray-950/60 flex">
-        {props.pane.buffers.map((b) => (
-          <BufferTab buffer={b} paneId={props.pane.id} />
+      <nav class="bg-gray-900 flex">
+        {props.pane.buffers.map((b, i) => (
+          <BufferTab
+            pane={props.pane}
+            buffer={b}
+            paneId={props.pane.id}
+            index={i}
+          />
         ))}
-        <div class="flex-grow border-b border-gray-800" />
+        <div
+          class={cx(
+            `flex-grow border-b border-gray-800 bg-gray-950/60`,
+            indexOfActiveBuffer === props.pane.buffers.length - 1 &&
+              `border-l rounded-bl-xl`,
+          )}
+        />
       </nav>
       <main class="text-white flex-grow">
         {activeBuffer ? (

@@ -1,12 +1,24 @@
 import cx from "classnames";
 import { XIcon } from "lucide-solid";
 import { type Component } from "solid-js";
-import type { Buffer as BufferType, Id } from "../../../lib/types";
+import type {
+  Buffer as BufferType,
+  EditorPaneType,
+  Id,
+} from "../../../lib/types";
 import { fileIcon, fileName } from "../../../lib/utils/files";
 import { globalState } from "../../../lib/state/store";
 
-const BufferTab: Component<{ buffer: BufferType; paneId: Id }> = (props) => {
+const BufferTab: Component<{
+  pane: EditorPaneType;
+  buffer: BufferType;
+  paneId: Id;
+  index: number;
+}> = (props) => {
   const { dispatch } = globalState();
+
+  const indexOfActiveBuffer =
+    props.pane.buffers.findIndex((b) => b.active) ?? 0;
 
   return (
     <div
@@ -20,8 +32,12 @@ const BufferTab: Component<{ buffer: BufferType; paneId: Id }> = (props) => {
       class={cx(
         `pl-4 pr-3 py-1.5 border-x border-b flex items-center border-t-2 shrink-0`,
         props.buffer.active
-          ? `bg-gray-900 text-gray-300 border-x-gray-800 border-b-transparent`
-          : `border-x-transparent border-b-gray-800 text-gray-500 hover:bg-gray-900/70`,
+          ? `text-gray-300 border-transparent`
+          : `border-b-gray-800 text-gray-500 hover:text-gray-400 !bg-gray-950/60`,
+        props.index === indexOfActiveBuffer - 1 &&
+          `border-r-gray-800 rounded-br-xl`,
+        props.index === indexOfActiveBuffer + 1 &&
+          `border-l-gray-800 rounded-bl-xl`,
         props.buffer.isDirty ? `border-t-blue-500/60` : `border-transparent`,
       )}
     >

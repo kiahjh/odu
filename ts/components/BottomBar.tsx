@@ -16,17 +16,11 @@ const BottomBar: Component = () => {
 
 export default BottomBar;
 
-const HelpMessage: Component<{ mode: Mode }> = (props) => {
-  if (props.mode.type === `new`) {
-    return <div></div>;
-  }
-
-  if (props.mode.type === `file-explorer`) {
-    return <div></div>;
-  }
-
-  if (props.mode.type === `editor`) {
-    return (
+const HelpMessage: Component<{ mode: Mode }> = (props) => (
+  <div class="h-full">
+    {props.mode.type === `new` && <div></div>}
+    {props.mode.type === `file-explorer` && <div></div>}
+    {props.mode.type === `editor` && (
       <div class={cx(`flex h-full items-center pl-1.5 relative`)}>
         <div
           class={cx(`absolute h-full w-[400px] left-0 top-0 bg-gradient-to-r`, {
@@ -57,9 +51,9 @@ const HelpMessage: Component<{ mode: Mode }> = (props) => {
           )}
         </div>
       </div>
-    );
-  }
-};
+    )}
+  </div>
+);
 
 const helpMessages = {
   normal: {
