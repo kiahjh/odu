@@ -4,7 +4,7 @@ import App from "./App";
 import "./index.css";
 import "@fontsource/roboto";
 import { GlobalStateContext, setState, state } from "./lib/state/store";
-import reducer from "./lib/state/reducers";
+import reducer from "./lib/state/reducer";
 
 render(
   () => (

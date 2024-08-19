@@ -1,5 +1,6 @@
 import { FolderIcon, FolderOpenIcon } from "lucide-solid";
 import { createSignal, type Component } from "solid-js";
+import cx from "classnames";
 import type { FileTreeNode } from "../lib/types/rs/FileTreeNode";
 import { fileName, fileIcon } from "../lib/utils/files";
 import { globalState } from "../lib/state/store";
@@ -8,29 +9,38 @@ interface Props {
   fileTree: FileTreeNode;
 }
 
-const FileExplorer: Component<Props> = ({ fileTree }) => (
-  <div class="w-80 bg-gray-950/30 text-white p-4 border-r border-gray-800 overflow-scroll max-h-[calc(100vh-32px-42px)] shrink-0">
-    {fileTree.type === `directory` &&
-      fileTree.children
-        .filter<FileTreeNode>(
-          (child): child is Extract<FileTreeNode, { type: `directory` }> =>
-            child.type === `directory`,
-        )
-        .sort((a, b) => a.path.localeCompare(b.path))
-        .concat(
-          fileTree.children
-            .filter((child) => child.type === `file`)
-            .sort((a, b) => a.path.localeCompare(b.path)),
-        )
-        .map((child) =>
-          child.type === `file` ? (
-            <File path={child.path} />
-          ) : (
-            <Folder path={child.path} children={child.children} />
-          ),
-        )}
-  </div>
-);
+const FileExplorer: Component<Props> = ({ fileTree }) => {
+  const { state } = globalState();
+
+  return (
+    <div
+      class={cx(
+        `w-80 bg-gray-950/30 p-4 border-r border-gray-800 overflow-hidden max-h-[calc(100vh-32px-42px)] shrink-0`,
+        !state.fileExplorerOpen && `hidden`,
+      )}
+    >
+      {fileTree.type === `directory` &&
+        fileTree.children
+          .filter<FileTreeNode>(
+            (child): child is Extract<FileTreeNode, { type: `directory` }> =>
+              child.type === `directory`,
+          )
+          .sort((a, b) => a.path.localeCompare(b.path))
+          .concat(
+            fileTree.children
+              .filter((child) => child.type === `file`)
+              .sort((a, b) => a.path.localeCompare(b.path)),
+          )
+          .map((child) =>
+            child.type === `file` ? (
+              <File path={child.path} />
+            ) : (
+              <Folder path={child.path} children={child.children} />
+            ),
+          )}
+    </div>
+  );
+};
 
 export default FileExplorer;
 

@@ -5,9 +5,12 @@ import BottomBar from "./components/BottomBar";
 import { globalState } from "./lib/state/store";
 import FileExplorer from "./components/FileExplorer";
 import Pane from "./components/panes/Pane";
+import listenForKeystrokes from "./lib/keyboard";
 
 const App: Component = () => {
-  const { state } = globalState();
+  const { state, dispatch } = globalState();
+
+  listenForKeystrokes(dispatch);
 
   return (
     <div class="bg-gray-900 rounded-lg max-h-screen h-screen w-screen flex flex-col overflow-hidden relative">

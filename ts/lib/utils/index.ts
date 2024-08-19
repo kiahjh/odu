@@ -1,4 +1,4 @@
-import type { Entity, Id, PaneType } from "../types";
+import type { Entity, Id, PaneType, Buffer } from "../types";
 
 export function idleEntity<T>(): Entity<T> {
   return { status: `idle` };
@@ -54,4 +54,21 @@ export function largestPaneId(rootPane: PaneType): Id {
         largestPaneId(rootPane.panes[1]),
       );
   }
+}
+
+export function newBuffer(path: string, content: string): Buffer {
+  return {
+    filePath: path,
+    isDirty: false,
+    content,
+    active: true,
+    cursor: {
+      mode: `single`,
+      position: {
+        row: 0,
+        column: 0,
+      },
+      selection: null,
+    },
+  };
 }

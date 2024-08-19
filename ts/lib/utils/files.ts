@@ -10,6 +10,7 @@ import JavaScriptReactIcon from "/filetypes/javascriptreact.svg";
 import TypeScriptReactIcon from "/filetypes/typescriptreact.svg";
 import SwiftIcon from "/filetypes/swift.svg";
 import type { EditorPaneType, PaneType } from "../types";
+import type { BundledLanguage } from "shiki";
 
 export type FileType =
   | `plaintext`
@@ -77,6 +78,19 @@ export function fileType(fileName: string): FileType {
       return `swift`;
     default:
       return `plaintext`;
+  }
+}
+
+export function shikiFileType(fileType: FileType): BundledLanguage | undefined {
+  switch (fileType) {
+    case `typescriptreact`:
+      return `tsx`;
+    case `javascriptreact`:
+      return `jsx`;
+    case `plaintext`:
+      return undefined;
+    default:
+      return fileType;
   }
 }
 

@@ -1,13 +1,15 @@
 import { createStore } from "solid-js/store";
 import { createContext, useContext } from "solid-js";
 import type { FileTreeNode } from "../types/rs/FileTreeNode";
-import type { Entity, PaneType } from "../types";
+import type { Entity, Mode, PaneType } from "../types";
 import type { Action } from "./actions";
 import { idleEntity } from "../utils";
 
 export type GlobalState = {
   fileTree: Entity<FileTreeNode>;
   rootPane: PaneType;
+  mode: Mode;
+  fileExplorerOpen: boolean;
 };
 
 export const [state, setState] = createStore<GlobalState>({
@@ -17,6 +19,8 @@ export const [state, setState] = createStore<GlobalState>({
     focused: true,
     id: 0,
   },
+  mode: { type: `new` },
+  fileExplorerOpen: true,
 });
 
 export const GlobalStateContext = createContext<{

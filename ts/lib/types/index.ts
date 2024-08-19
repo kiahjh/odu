@@ -53,4 +53,39 @@ export type Buffer = {
   content: string;
   active: boolean;
   isDirty: boolean;
+  cursor:
+    | {
+        mode: `single`;
+        position: CharacterPosition;
+        selection: null | {
+          start: CharacterPosition;
+          end: CharacterPosition;
+        };
+      }
+    | {
+        mode: `multi`;
+        positions: CharacterPosition[];
+        selections: null | Array<{
+          start: CharacterPosition;
+          end: CharacterPosition;
+        }>;
+      };
 };
+
+export type CharacterPosition = {
+  row: number;
+  column: number;
+};
+
+export type Mode =
+  | {
+      type: `file-explorer`;
+      subMode: `normal` | `rename` | `create-file` | `create-folder` | `delete`;
+    }
+  | {
+      type: `editor`;
+      subMode: `normal` | `insert` | `visual` | `search`;
+    }
+  | {
+      type: `new`;
+    };
