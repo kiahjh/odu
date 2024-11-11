@@ -12,6 +12,12 @@ export default class Reducer<Payload = undefined> {
   public call(payload: Payload, setState: SetStoreFunction<GlobalState>): void {
     setState(produce(async (state) => await this.mutatingFn(state, payload)));
   }
+
+  public mutate(globalState: GlobalState, payload: Payload) {
+    produce<GlobalState>(
+      async (state) => await this.mutatingFn(state, payload),
+    )(globalState);
+  }
 }
 
 export class ReducerError {

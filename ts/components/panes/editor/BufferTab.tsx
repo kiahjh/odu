@@ -33,7 +33,7 @@ const BufferTab: Component<{
         `pl-4 pr-3 py-1.5 border-x border-b flex items-center border-t-2 shrink-0`,
         props.buffer.active
           ? `text-gray-300 border-transparent`
-          : `border-b-gray-800 text-gray-500 hover:text-gray-400 !bg-gray-950/60`,
+          : `border-b-gray-800 text-gray-500 hover:!bg-gray-950/15 hover:text-gray-400 !bg-gray-950/60`,
         props.index === indexOfActiveBuffer - 1 &&
           `border-r-gray-800 rounded-br-xl`,
         props.index === indexOfActiveBuffer + 1 &&

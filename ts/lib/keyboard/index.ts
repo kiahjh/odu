@@ -7,11 +7,7 @@ export default function listenForKeystrokes(
   const callback = (event: KeyboardEvent) => {
     if (event.type === `keypress`) {
       dispatch({
-        key: event.key,
-        ctrlKey: event.ctrlKey,
-        shiftKey: event.shiftKey,
-        altKey: event.altKey,
-        metaKey: event.metaKey,
+        event,
         type: `keyPressed`,
       });
     }

@@ -1,15 +1,18 @@
-import Reducer from "../Reducer";
+import type { GlobalState } from "../../store";
+import { focusedPane } from "../../../utils";
+import Reducer, { ReducerError } from "../Reducer";
 
 export const keyPressed = new Reducer<{
-  key: string;
-  ctrlKey: boolean;
-  shiftKey: boolean;
-  altKey: boolean;
-  metaKey: boolean;
-}>((state, { key, ctrlKey, shiftKey, altKey, metaKey }) => {
+  event: KeyboardEvent;
+}>((state, { event }) => {
+  const activePane = focusedPane(state.rootPane);
+  if (!activePane) return;
+
+  const kda = createKeyboardDrivenActionMaker(state, event);
+
   // global commands:
 
-  if (key === `s` && metaKey) {
+  if (event.key === `s` && event.metaKey) {
     // toggleSidebar
     state.fileExplorerOpen = !state.fileExplorerOpen;
     return;
@@ -22,31 +25,40 @@ export const keyPressed = new Reducer<{
   }
 
   if (state.mode.type === `editor`) {
+    if (activePane.type !== `editor`)
+      throw new ReducerError(
+        `In editor mode, but active pane is not an editor pane.`,
+      );
+
     switch (state.mode.subMode) {
       case `normal`: {
-        if (key === `i`) {
-          state.mode.subMode = `insert`;
-        } else if (key === `v`) {
-          state.mode.subMode = `visual`;
-        } else if (key === `/`) {
-          state.mode.subMode = `search`;
-        }
+        kda(switchToInsertMode, `i`, false, false, false, false);
+        kda(switchToVisualMode, `v`, false, false, false, false);
+        kda(switchToSearchMode, `/`, false, false, false, false);
         return;
       }
       case `insert`:
-        if (key === `Escape`) {
-          state.mode.subMode = `normal`;
-        }
+        kda(switchToNormalMode, `Escape`, false, false, false, false);
         return;
       case `visual`:
-        if (key === `Escape`) {
-          state.mode.subMode = `normal`;
-        }
+        kda(switchToNormalMode, `Escape`, false, false, false, false);
+        kda(switchToVisualLineMode, `l`, false, false, false, false);
+        kda(switchToVisualBlockMode, `b`, false, false, false, false);
+        return;
+      case `visual-line`:
+        kda(switchToNormalMode, `Escape`, false, false, false, false);
+        kda(switchToVisualMode, `l`, false, false, false, false);
+        kda(switchToVisualMode, `v`, false, false, false, false);
+        kda(switchToVisualBlockMode, `b`, false, false, false, false);
+        return;
+      case `visual-block`:
+        kda(switchToNormalMode, `Escape`, false, false, false, false);
+        kda(switchToVisualMode, `b`, false, false, false, false);
+        kda(switchToVisualMode, `v`, false, false, false, false);
+        kda(switchToVisualLineMode, `l`, false, false, false, false);
         return;
       case `search`:
-        if (key === `Escape`) {
-          state.mode.subMode = `normal`;
-        }
+        kda(switchToNormalMode, `Escape`, false, false, false, false);
         return;
     }
   }
@@ -55,3 +67,76 @@ export const keyPressed = new Reducer<{
     return;
   }
 });
+
+// actions
+
+const switchToInsertMode: StateManipulator = (state) => {
+  if (state.mode.type === `editor`) {
+    state.mode.subMode = `insert`;
+  }
+};
+
+const switchToNormalMode: StateManipulator = (state) => {
+  if (state.mode.type === `editor`) {
+    state.mode.subMode = `normal`;
+  }
+};
+
+const switchToVisualMode: StateManipulator = (state) => {
+  if (state.mode.type === `editor`) {
+    state.mode.subMode = `visual`;
+  }
+};
+
+const switchToVisualLineMode: StateManipulator = (state) => {
+  if (state.mode.type === `editor`) {
+    state.mode.subMode = `visual-line`;
+  }
+};
+
+const switchToVisualBlockMode: StateManipulator = (state) => {
+  if (state.mode.type === `editor`) {
+    state.mode.subMode = `visual-block`;
+  }
+};
+
+const switchToSearchMode: StateManipulator = (state) => {
+  if (state.mode.type === `editor`) {
+    state.mode.subMode = `search`;
+  }
+};
+
+// helpers
+
+type StateManipulator = (state: GlobalState) => void;
+
+function createKeyboardDrivenActionMaker(
+  state: GlobalState,
+  event: KeyboardEvent,
+): (
+  fn: StateManipulator,
+  key: string,
+  shift: boolean,
+  ctrl: boolean,
+  meta: boolean,
+  alt: boolean,
+) => void {
+  return (
+    fn: StateManipulator,
+    key: string,
+    shift: boolean,
+    ctrl: boolean,
+    meta: boolean,
+    alt: boolean,
+  ) => {
+    if (
+      event.key === key &&
+      event.shiftKey === shift &&
+      event.ctrlKey === ctrl &&
+      event.metaKey === meta &&
+      event.altKey === alt
+    ) {
+      fn(state);
+    }
+  };
+}

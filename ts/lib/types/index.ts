@@ -84,7 +84,13 @@ export type Mode =
     }
   | {
       type: `editor`;
-      subMode: `normal` | `insert` | `visual` | `search`;
+      subMode:
+        | `normal`
+        | `insert`
+        | `visual`
+        | `search`
+        | `visual-line`
+        | `visual-block`;
     }
   | {
       type: `new`;

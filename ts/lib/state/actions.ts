@@ -8,9 +8,5 @@ export type Action =
   | { type: `bufferTabCloseClicked`; filePath: string; paneId: Id }
   | {
       type: `keyPressed`;
-      key: string;
-      ctrlKey: boolean;
-      shiftKey: boolean;
-      altKey: boolean;
-      metaKey: boolean;
+      event: KeyboardEvent;
     };

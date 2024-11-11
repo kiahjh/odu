@@ -44,6 +44,7 @@ export default function reducer(
   } catch (e) {
     // TODO: make error handling more user-friendly
     const error: ReducerError = e as any;
+    alert(`Reducer error: ${error.message}`);
     console.error(`Reducer error: ${error.message}`);
     console.error(`Details: ${error.detail ?? `none`}`);
   }

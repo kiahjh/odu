@@ -27,6 +27,10 @@ const HelpMessage: Component<{ mode: Mode }> = (props) => (
             hidden: props.mode.subMode === `normal`,
             "from-blue-500/40 to-transparent": props.mode.subMode === `insert`,
             "from-pink-500/30 to-transparent": props.mode.subMode === `visual`,
+            "from-purple-500/40 to-transparent":
+              props.mode.subMode === `visual-line`,
+            "from-orange-400/30 to-transparent":
+              props.mode.subMode === `visual-block`,
             "from-green-400/30 to-transparent": props.mode.subMode === `search`,
           })}
         />
@@ -37,6 +41,8 @@ const HelpMessage: Component<{ mode: Mode }> = (props) => (
               "bg-gray-800/70 !text-gray-400": props.mode.subMode === `normal`,
               "bg-blue-400": props.mode.subMode === `insert`,
               "bg-pink-400": props.mode.subMode === `visual`,
+              "bg-purple-400": props.mode.subMode === `visual-line`,
+              "bg-orange-400": props.mode.subMode === `visual-block`,
               "bg-green-400": props.mode.subMode === `search`,
             },
           )}
@@ -66,6 +72,17 @@ const helpMessages = {
   },
   visual: {
     esc: `normal mode`,
+    l: `line`,
+    b: `block`,
+  },
+  "visual-line": {
+    esc: `normal mode`,
+    l: `visual mode`,
+    b: `block`,
+  },
+  "visual-block": {
+    esc: `normal mode`,
+    b: `visual mode`,
     l: `line`,
   },
   search: {

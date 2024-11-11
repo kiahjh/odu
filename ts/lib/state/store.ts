@@ -12,7 +12,7 @@ export type GlobalState = {
   fileExplorerOpen: boolean;
 };
 
-export const [state, setState] = createStore<GlobalState>({
+export const INITIAL_STATE: GlobalState = {
   fileTree: idleEntity(),
   rootPane: {
     type: `new`,
@@ -21,7 +21,9 @@ export const [state, setState] = createStore<GlobalState>({
   },
   mode: { type: `new` },
   fileExplorerOpen: true,
-});
+};
+
+export const [state, setState] = createStore<GlobalState>(INITIAL_STATE);
 
 export const GlobalStateContext = createContext<{
   state: GlobalState;
